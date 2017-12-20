@@ -7,7 +7,7 @@ services:
     proxy: # used as image, not meant to be run.
         build: # change context to project's root folder.
             context: ../../
-            dockerfile: ./setup/container/proxy.dockerfile
+            dockerfile: ./setup/container/containerBuild.dockerfile
         image: myuserindocker/redbird-reverseproxy:latest # name of biult image cannot be uppercase.
         ports:
             - 80:80
@@ -17,13 +17,13 @@ services:
             EMAIL: ${EMAIL}
             LETSENCRYPT_PORT: ${LETSENCRYPT_PORT}
         volumes:
-          - ../../source/server/:/app/server/
-        working_dir: /app/
+          - ../../source/server/:/project/application/server/
+        working_dir: /project/application/
         # entrypoint: /tmp/shellScript/entrypoint.sh
         # command: bash -c ""
     
     development:
         image: myuserindocker/deployment-environment:latest
         volumes:
-            - ../../source/server/:/app/server/
+            - ../../source/server/:/project/application/server/
         command: bash -c "sleep 100000"

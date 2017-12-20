@@ -6,7 +6,8 @@ let childProcessPromise = require('child-process-promise');
 let letsencryptPort = process.env.LETSENCRYPT_PORT;
 let email = process.env.EMAIL;
 let proxyConfigFolder = 'webappProxyConfig'
-let proxyFolderPath = `/app/server/${proxyConfigFolder}`
+let proxyFolderPath = `/project/application/server/${proxyConfigFolder}`
+let certificateFolder = `/project/application/certificate`
 
 let webappGithubProxyModule = [
     {
@@ -44,7 +45,7 @@ let proxy = require('redbird')({
     xfwd: true, 
     letsencrypt: {
         port: letsencryptPort, 
-        path: '/app/certificate'
+        path: certificateFolder
     },
     ssl: { // Optional SSL proxying.
         port: 443, // SSL port the proxy will listen to.
