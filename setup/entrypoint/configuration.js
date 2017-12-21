@@ -7,7 +7,7 @@ module.exports = {
 
     },
     run: {
-        file: './application/setup/entrypoint/run.js',
+        // file: './application/setup/entrypoint/run.js',
 
     }
 }

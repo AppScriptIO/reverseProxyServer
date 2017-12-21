@@ -10,7 +10,10 @@ fi;
 
 # pwd - current working directory in host machine.
 # currentRelativeFilePath - path relative to where shell was executed from.
+# TODO: Remove "containerManager" environment variable as it must be a default set in the dockerfile and accessable after build.
 docker run \
     --volume `pwd`/$currentRelativeFilePath/..:/project/application \
     --env entrypointOption=$entrypointOption \
-    myuserindocker/deployment-environment:latest
+    myuserindocker/deployment-environment:latest \
+    sleep 10000 
+    # ls /project/application/setup/entrypoint/
