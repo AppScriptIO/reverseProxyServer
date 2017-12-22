@@ -1,5 +1,8 @@
+const { execSync, spawn, spawnSync } = require('child_process')
+spawnSync('docker-compose', [
+        "-f ./setup/container/deployment.dockerCompose.yml up --force-recreate development"
+    ], { cwd: '/project/application', shell: true, stdio:[0,1,2] })
 
-console.log('Running app')
 // // development
 // docker-compose -f ./setup/container/deployment.dockerCompose.yml up -d --force-recreate development
 

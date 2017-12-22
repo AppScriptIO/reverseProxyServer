@@ -1,4 +1,4 @@
-version: '2.1'
+version: '2.2'
 # Tests & Build: source code --> distribution code
 
 # USAGE (from root directory): docker-compose -f <filePath> up <service>
