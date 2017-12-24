@@ -7,5 +7,5 @@ echo host path: `pwd`/$currentRelativeFilePath
 docker run \
     --volume `pwd`/$currentRelativeFilePath/..:/project/application \
     --volume /var/run/docker.sock:/var/run/docker.sock \
-    myuserindocker/deployment-environment:latest \
+    myuserindocker/deployment-environment:latest \ # version 2.9
     containerCommand "$@"
