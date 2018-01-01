@@ -33,7 +33,7 @@ services:
       DEPLOYMENT: production
       EMAIL: ${EMAIL}
       LETSENCRYPT_PORT: ${LETSENCRYPT_PORT}
-    working_dir: /project/application/server
+    # working_dir: /project/application/server
     # command: bash -c "npm install; node entrypoint.js"
 
   # swarm-listener:

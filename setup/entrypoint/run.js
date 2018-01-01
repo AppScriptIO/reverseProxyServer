@@ -23,7 +23,7 @@ switch (process.argv[0]) {
         // 3. Export email address used for reverse proxy certificate registration with let's encrypt
         // export EMAIL=<...>
         // export LETSENCRYPT_PORT=3000
-        
+        // docker network create --driver overlay proxy
         // 4. 
         // docker stack deploy -c ./setup/container/production.dockerStack.yml proxy        
     break;
