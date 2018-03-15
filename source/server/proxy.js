@@ -27,6 +27,10 @@ let webappGithubProxyModule = [
         url: 'https://raw.githubusercontent.com/myuseringithub/radioscannerWebapp/master/setup/reverseProxy/production.redbirdConf.js'
     },
     {
+        name: 'naefswissWebapp.js',
+        url: 'https://raw.githubusercontent.com/myuseringithub/naefswissWebapp/master/setup/reverseProxy/production.redbirdConf.js'
+    },
+    {
         name: 'dentristWebapp.js',
         url: 'https://raw.githubusercontent.com/myuseringithub/dentristWebapp/master/setup/reverseProxy/production.redbirdConf.js'
     },
@@ -95,6 +99,13 @@ filesystemPromise
             .catch(function(error) { throw error })
     }) 
 
+
+proxy.notFound((req, res) => { // will be called when a proxy route is not found.
+    res.statusCode = 404;
+    res.write('Oops.. No app found to handle your request.');
+    res.end();
+})
+  
 
 // _____________________________________________________________________________
 // Using express with redbird - https://github.com/OptimalBits/redbird/issues/83

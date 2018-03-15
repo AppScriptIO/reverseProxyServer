@@ -2,7 +2,6 @@ const { execSync, spawn, spawnSync } = require('child_process')
 import path from 'path'
 import assert from 'assert'
 import configuration from '../configuration/configuration.js'
-console.log(process.argv)
 const applicationPath = path.join(configuration.projectPath, 'application')
 
 // extract variables with pattern "<key>=<value>"
