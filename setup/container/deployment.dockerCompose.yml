@@ -25,5 +25,7 @@ services:
     development:
         image: myuserindocker/deployment-environment:latest
         volumes:
-            - ../../source/server/:/project/application/server/
-        command: bash -c "sleep 100000"
+            - ${hostPath}:/project/application/
+        working_dir: /project/application/
+        # entrypoint: ./source/server/entrypoint.sh # overridden using in js (docker-compose command executed with spawn).
+        command: bash -c "sleep 100000" # fallback if entrypoint in js file isn't passed to the command during child process execution.

@@ -5,9 +5,10 @@ ARG PROJECT="/project/application"
 ENV PROJECT ${PROJECT}
 
 ENV EMAIL ${EMAIL}
-ENV LETSENCRYPT_PORT ${LETSENCRYPT_PORT}
+# ENV LETSENCRYPT_PORT ${LETSENCRYPT_PORT}
 
-COPY ./source/server $PROJECT/server
+COPY ./ $PROJECT
+# COPY ./source/server $PROJECT/server
 
-WORKDIR $PROJECT/server
-ENTRYPOINT $PROJECT/server/entrypoint.sh run
+WORKDIR $PROJECT/source/server
+ENTRYPOINT $PROJECT/source/server/entrypoint.sh run

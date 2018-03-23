@@ -34,7 +34,7 @@ services:
       EMAIL: ${EMAIL}
       LETSENCRYPT_PORT: ${LETSENCRYPT_PORT}
     # working_dir: /project/application/server
-    # command: bash -c "npm install; node entrypoint.js"
+    command: bash -c "npm install; node entrypoint.js"
 
   # swarm-listener:
   #   image: vfarcic/docker-flow-swarm-listener
@@ -48,3 +48,24 @@ services:
   #   deploy:
   #     placement:
   #       constraints: [node.role == manager]
+
+  # the service keeps restarting and checking or issuing certificates, as it is not built with automatic timed execution. It executes and then closes container.
+  # letsencrypt: 
+  #   image: certbot/dns-google:latest
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #     - 3000:3000
+  #   volumes: 
+  #     - "/mnt/datadisk-1/redbirdProxy/certificate:/etc/letsencrypt/"
+  #   deploy:
+  #     replicas: 1
+  #   environment:
+  #     EMAIL: ${EMAIL}
+  #   entrypoint: 'certbot certonly --agree-tos -n --test-cert --dns-google -m $EMAIL -d table.io -d cdn.taleb.io -d api.taleb.io -d socket.taleb.io'
+
+  ### Docker 'run' equivalent: 
+  # docker run -v /mnt/datadisk-1/redbirdProxy/certificate:/etc/letsencrypt/ --entrypoint "certbot" certbot/dns-google:latest  certonly --agree-tos -n --test-cert --dns-google -m $EMAIL 
+  # -d taleb.io -d cdn.taleb.io -d api.taleb.io -d socket.taleb.io
+  # -d gaziteng.com -d cdn.gaziteng.com -d api.gaziteng.com -d socket.gaziteng.com
+  # -d naifaboswiss.com -d cdn.naifaboswiss.com -d api.naifaboswiss.com -d socket.naifaboswiss.com 

@@ -1,111 +1,84 @@
-let path = require('path') 
-let filesystem = require('fs');
-let filesystemPromise = require('fs-promise'); // supports "fs-extra" functionality.
-let childProcessPromise = require('child-process-promise');
+const path = require('path') 
+const filesystem = require('fs')
+const redbird = require('redbird')
+const config = require('../../setup/configuration/configuration.js')
+const retrieveWebappProxyConfig = require('./retrieveWebappProxyConfig.js')
 
-let letsencryptPort = process.env.LETSENCRYPT_PORT;
-let email = process.env.EMAIL;
-let proxyConfigFolder = 'webappProxyConfig'
-let proxyFolderPath = `/project/application/server/${proxyConfigFolder}`
-let certificateFolder = `/project/application/certificate`
+module.exports = function () {
 
-let webappGithubProxyModule = [
-    {
-        name: 'talebWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/talebWebapp/master/setup/reverseProxy/production.redbirdConf.js',
-    },
-    {
-        name: 'gazitengWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/gazitengWebapp/master/setup/reverseProxy/production.redbirdConf.js'
-    },
-    {
-        name: 'animalsoundsWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/animalsoundsWebapp/master/setup/reverseProxy/production.redbirdConf.js'
-    },
-    {
-        name: 'radioscannerWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/radioscannerWebapp/master/setup/reverseProxy/production.redbirdConf.js'
-    },
-    {
-        name: 'naefswissWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/naefswissWebapp/master/setup/reverseProxy/production.redbirdConf.js'
-    },
-    {
-        name: 'dentristWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/dentristWebapp/master/setup/reverseProxy/production.redbirdConf.js'
-    },
-    {
-        name: 'assalammdWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/assalammdWebapp/master/setup/reverseProxy/production.redbirdConf.js'
-    },
-    {
-        name: 'jenkins_continuousDeploymentServer.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/appDeploymentLifecycle/master/jenkins_continuousDeploymentServer.container/reverseProxy/production.redbirdConf.js'
-    },
-]
+    // Setup global Redbird configuration.
+    const proxy = redbird({
+        port: 80,
+        xfwd: true, 
+        // letsencrypt: {
+        //     port: letsencryptPort, 
+        //     path: certificateBaseFolder
+        // },
+        ssl: { // Optional SSL proxying.
+            port: 443, // SSL port the proxy will listen to.
+            // // Default certificates
+            // key: keyPath,
+            // cert: certPath,
+            // ca: caPath // Optional.
+            redirect: true // Disable HTTPS autoredirect to this route.
+        }
+    });
 
-let proxy = require('redbird')({
-    port: 80,
-    xfwd: true, 
-    letsencrypt: {
-        port: letsencryptPort, 
-        path: certificateFolder
-    },
-    ssl: { // Optional SSL proxying.
-        port: 443, // SSL port the proxy will listen to.
-        // // Default certificates
-        // key: keyPath,
-        // cert: certPath,
-        // ca: caPath // Optional.
-        redirect: true // Disable HTTPS autoredirect to this route.
-    }
-});
-
-if (!filesystem.existsSync(proxyFolderPath)){
-    filesystem.mkdirSync(proxyFolderPath);
-}
-
-let promiseArray = []
-filesystemPromise
-    .ensureDir(proxyFolderPath) // directory should be present
-    .then(function() { // retrieve proxy configuration for each project.
-        webappGithubProxyModule.map((file, i) => {
-            let toFile = `${proxyFolderPath}/${file.name}`
-            let rawData = file.url
-            let promise = childProcessPromise.exec(`curl -o ${toFile} ${rawData}`)
-            promiseArray.push(promise)
-            console.log(`• Downloading raw data from ${rawData}.\n`)
-        })
+    // will be called when a proxy route is not found.
+    proxy.notFound((req, res) => { 
+        res.statusCode = 404;
+        res.write('Oops.. No app found to handle your request.');
+        res.end();
     })
-    .catch(function(error) { throw error })
-    .then(function() {
-        Promise.all(promiseArray)
-            .then(function() {
-                filesystem.readdirSync(proxyFolderPath).forEach(function(file) {
-                    if(file.substr(file.lastIndexOf('.')+1)) {
-                        let filePath = path.join(proxyFolderPath, file)
-                        console.log(`\n\n\n\n• Adding ${filePath} to proxy.`)
-                        let func;
-                        try {
-                            func = require(filePath)
-                        } catch (error) {
-                            throw error
-                        }
-                        console.log(func) 
-                        func(proxy) // initialize proxy configuration with the current running proxy app.
+
+    // Downlaod and execute each webapp proxy configuration.
+    retrieveWebappProxyConfig()
+        .then(function() {
+            // Execute webapp proxy configuration
+            filesystem.readdirSync(config.proxyFolderPath).forEach(function(file) {
+                if(file.substr(file.lastIndexOf('.') + 1)) { // Ensure file is being read
+                    let filePath = path.join(config.proxyFolderPath, file)
+                    let func;
+                    try {
+                        func = require(filePath)
+                    } catch (error) {
+                        throw error
                     }
-                });
+                    console.log(`\n\n\n\n• Adding ${filePath} to proxy.`)
+                    console.log(func)
+                    let proxyConfigArray = func() // initialize proxy configuration with the current running proxy app.
+                    proxyConfigArray.forEach(function(proxyConfig) {
+                        registerProxyConfig(proxyConfig)
+                    })
+                }
             })
-            .catch(function(error) { throw error })
-    }) 
+        })
+    
+    function registerProxyConfig(proxyConfig) {
+        if(proxyConfig.ssl) { // HTTPS
+            let hostname = (proxyConfig.subdomain) ? `${proxyConfig.subdomain}.${proxyConfig.domain}` : proxyConfig.domain;
+            let certificateFolder = path.join(config.certificateBaseFolder, proxyConfig.domain)
+            proxy.register(
+                hostname,
+                proxyConfig.containerRoute,
+                {
+                    ssl: { // all wildcard certificates are saved under the main domain folder.
+                        // ca: path.join( certificateFolder, 'chain.pem'), // certificate authority - or served separately.
+                        key: path.join( certificateFolder, 'privkey.pem'), // private key
+                        cert: path.join( certificateFolder, 'fullchain.pem') // public key - the public certificate should be combination of cert+chain i.e. "cat cert.pem chain.pem > fullchain.pem"
+                    }
+                }
+            )
+        } else { // HTTP
+            let hostname = (proxyConfig.subdomain) ? `${proxyConfig.subdomain}.${proxyConfig.domain}` : proxyConfig.domain;
+            proxy.register(
+                hostname, 
+                proxyConfig.containerRoute
+            )
+        }
+    }
 
-
-proxy.notFound((req, res) => { // will be called when a proxy route is not found.
-    res.statusCode = 404;
-    res.write('Oops.. No app found to handle your request.');
-    res.end();
-})
-  
+}
 
 // _____________________________________________________________________________
 // Using express with redbird - https://github.com/OptimalBits/redbird/issues/83

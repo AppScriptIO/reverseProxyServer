@@ -21,13 +21,14 @@ for (let arg of process.argv) {
 // 2. Build image.
 assert.notStrictEqual(namedArg.EMAIL, undefined, 'EMAIL argument must exist.')
 spawnSync('docker-compose', [
-    "-f ./setup/container/deployment.dockerCompose.yml build --no-cache proxy"
+    "-f ./setup/container/deployment.dockerCompose.yml",
+    "build --no-cache proxy"
 ], {
     cwd: applicationPath, 
     shell: true, 
     stdio: [0,1,2], 
     env: {
-        LETSENCRYPT_PORT: 3000,
+        LETSENCRYPT_PORT: 3000, // redbird's letsencrypt was used for AMCE protocol v1, which doesn't support letsencrypt DNS wildcard (ACME v2)
         EMAIL: namedArg.EMAIL
     }
 })

@@ -2,11 +2,10 @@
   "name": "proxy",
   "version": "1.0.0",
   "description": "",
-  "main": "proxy.js",
   "dependencies": {
-    "child-process-promise": "*",
+    "child-process-promise": "^2.2.1",
     "fs-promise": "^2.0.3",
-    "redbird": "*"
+    "redbird": "^0.7.0"
   },
   "keywords": [],
   "author": "",
