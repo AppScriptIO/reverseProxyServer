@@ -1,5 +1,6 @@
 const path = require('path') 
 const filesystem = require('fs')
+const url = require('url');
 const redbird = require('redbird')
 const config = require('../../setup/configuration/configuration.js')
 const retrieveWebappProxyConfig = require('./retrieveWebappProxyConfig.js')
@@ -27,27 +28,18 @@ module.exports = function () {
     // will be called when a proxy route is not found.
     proxy.notFound((req, res) => { 
         if (req.headers.host.slice(0, 4) === 'www.') { // if subdomain is 'www'
-            wwwRedirect(req,res) // Redirect subdomain "www."
+            let parsedRequest = url.parse(req.url)
+            let newHost = req.headers.host.slice(4)
+            let newLocation = `${parsedRequest.protocol || 'http'}://${newHost}${parsedRequest.path || '/'}`
+            console.log(`• Redicrecting www to: ${newLocation}`)
+            res.writeHead(301, { 'Location': newLocation })
+            res.end('Redirecting...')
         } else {
-            notFound()
+            res.statusCode = 404
+            res.write('Oops.. No app found to handle your request.')
+            res.end()
         }
     })
-
-    function notFound(req, res) {
-        res.statusCode = 404
-        res.write('Oops.. No app found to handle your request.')
-        res.end()
-    }
-
-    function wwwRedirect(req, res) {
-        let newHost = req.headers.host.slice(4)
-        let newLocation = `${req.protocol}://${newHost}${req.originalUrl}`
-        res.writeHead(301, { 
-            Location: newLocation
-        })
-        res.end()
-    }
-    
 
     // Downlaod and execute each webapp proxy configuration.
     retrieveWebappProxyConfig()
