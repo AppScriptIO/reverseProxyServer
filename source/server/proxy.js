@@ -26,10 +26,23 @@ module.exports = function () {
 
     // will be called when a proxy route is not found.
     proxy.notFound((req, res) => { 
+        wwwRedirect(req,res) // Redirect subdomain "www."
         res.statusCode = 404;
         res.write('Oops.. No app found to handle your request.');
         res.end();
     })
+
+    function wwwRedirect(req, res) {
+        if (req.headers.host.slice(0, 4) === 'www.') {
+            let newHost = req.headers.host.slice(4)
+            let newLocation = `${req.protocol}://${newHost}${req.originalUrl}`
+            res.writeHead(301, { 
+                Location: newLocation
+            })
+            res.end()
+        }
+    }
+    
 
     // Downlaod and execute each webapp proxy configuration.
     retrieveWebappProxyConfig()
