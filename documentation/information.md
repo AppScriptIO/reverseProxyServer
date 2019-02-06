@@ -6,3 +6,7 @@ Test SSL using - https://www.ssllabs.com/ssltest/analyze.html
 TODO: packages to consider integration : 
 • https://github.com/substack/bouncy
 • node-http-proxy
+
+___
+
+### 🔑 License: [MIT](/.github/LICENSE)
