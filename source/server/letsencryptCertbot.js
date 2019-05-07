@@ -1,29 +1,30 @@
-/* Let's Encrypt shell */
-// TODO: use this entrypoint instead of shell entrypoint, and merge docker containers for letsencypt and proxy.
+"use strict";
 
-const { execSync, spawn, spawnSync } = require('child_process')
+
+const { execSync, spawn, spawnSync } = require('child_process');
 
 module.exports = function () {
 
-    let email = process.env.EMAIL
-    let environmentVariable = {}
+  let email = process.env.EMAIL;
+  let environmentVariable = {};
 
-    let processCommand = 'certbot',
-    processCommandArgs = [
-        `certonly`,
-        `--agree-tos -n`, // Agree to terms & use non interative execution.
-        `--test-cert`,
-        `--dns-google `, // type of plugin
-        `-m ${email}`,
-        `-d taleb.io` // domains
-    ],
-    processOption = {
-        // cwd: `${applicationPath}`, 
-        shell: true, 
-        stdio: [0,1,2], 
-        env: environmentVariable
-    }
-    let childProcess = spawn(processCommand, processCommandArgs, processOption)
-    childProcess.on('uncaughtException', function(e) { throw e })
-    
-}
+  let processCommand = 'certbot',
+  processCommandArgs = [
+  `certonly`,
+  `--agree-tos -n`,
+  `--test-cert`,
+  `--dns-google `,
+  `-m ${email}`,
+  `-d taleb.io`],
+
+  processOption = {
+
+    shell: true,
+    stdio: [0, 1, 2],
+    env: environmentVariable };
+
+  let childProcess = spawn(processCommand, processCommandArgs, processOption);
+  childProcess.on('uncaughtException', function (e) {throw e;});
+
+};
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NvdXJjZS9zZXJ2ZXIvbGV0c2VuY3J5cHRDZXJ0Ym90LmpzIl0sIm5hbWVzIjpbImV4ZWNTeW5jIiwic3Bhd24iLCJzcGF3blN5bmMiLCJyZXF1aXJlIiwibW9kdWxlIiwiZXhwb3J0cyIsImVtYWlsIiwicHJvY2VzcyIsImVudiIsIkVNQUlMIiwiZW52aXJvbm1lbnRWYXJpYWJsZSIsInByb2Nlc3NDb21tYW5kIiwicHJvY2Vzc0NvbW1hbmRBcmdzIiwicHJvY2Vzc09wdGlvbiIsInNoZWxsIiwic3RkaW8iLCJjaGlsZFByb2Nlc3MiLCJvbiIsImUiXSwibWFwcGluZ3MiOiI7OztBQUdBLE1BQU0sRUFBRUEsUUFBRixFQUFZQyxLQUFaLEVBQW1CQyxTQUFuQixLQUFpQ0MsT0FBTyxDQUFDLGVBQUQsQ0FBOUM7O0FBRUFDLE1BQU0sQ0FBQ0MsT0FBUCxHQUFpQixZQUFZOztBQUV6QixNQUFJQyxLQUFLLEdBQUdDLE9BQU8sQ0FBQ0MsR0FBUixDQUFZQyxLQUF4QjtBQUNBLE1BQUlDLG1CQUFtQixHQUFHLEVBQTFCOztBQUVBLE1BQUlDLGNBQWMsR0FBRyxTQUFyQjtBQUNBQyxFQUFBQSxrQkFBa0IsR0FBRztBQUNoQixZQURnQjtBQUVoQixrQkFGZ0I7QUFHaEIsZUFIZ0I7QUFJaEIsaUJBSmdCO0FBS2hCLFFBQUtOLEtBQU0sRUFMSztBQU1oQixlQU5nQixDQURyQjs7QUFTQU8sRUFBQUEsYUFBYSxHQUFHOztBQUVaQyxJQUFBQSxLQUFLLEVBQUUsSUFGSztBQUdaQyxJQUFBQSxLQUFLLEVBQUUsQ0FBQyxDQUFELEVBQUcsQ0FBSCxFQUFLLENBQUwsQ0FISztBQUlaUCxJQUFBQSxHQUFHLEVBQUVFLG1CQUpPLEVBVGhCOztBQWVBLE1BQUlNLFlBQVksR0FBR2YsS0FBSyxDQUFDVSxjQUFELEVBQWlCQyxrQkFBakIsRUFBcUNDLGFBQXJDLENBQXhCO0FBQ0FHLEVBQUFBLFlBQVksQ0FBQ0MsRUFBYixDQUFnQixtQkFBaEIsRUFBcUMsVUFBU0MsQ0FBVCxFQUFZLENBQUUsTUFBTUEsQ0FBTixDQUFTLENBQTVEOztBQUVILENBdkJEIiwic291cmNlc0NvbnRlbnQiOlsiLyogTGV0J3MgRW5jcnlwdCBzaGVsbCAqL1xuLy8gVE9ETzogdXNlIHRoaXMgZW50cnlwb2ludCBpbnN0ZWFkIG9mIHNoZWxsIGVudHJ5cG9pbnQsIGFuZCBtZXJnZSBkb2NrZXIgY29udGFpbmVycyBmb3IgbGV0c2VuY3lwdCBhbmQgcHJveHkuXG5cbmNvbnN0IHsgZXhlY1N5bmMsIHNwYXduLCBzcGF3blN5bmMgfSA9IHJlcXVpcmUoJ2NoaWxkX3Byb2Nlc3MnKVxuXG5tb2R1bGUuZXhwb3J0cyA9IGZ1bmN0aW9uICgpIHtcblxuICAgIGxldCBlbWFpbCA9IHByb2Nlc3MuZW52LkVNQUlMXG4gICAgbGV0IGVudmlyb25tZW50VmFyaWFibGUgPSB7fVxuXG4gICAgbGV0IHByb2Nlc3NDb21tYW5kID0gJ2NlcnRib3QnLFxuICAgIHByb2Nlc3NDb21tYW5kQXJncyA9IFtcbiAgICAgICAgYGNlcnRvbmx5YCxcbiAgICAgICAgYC0tYWdyZWUtdG9zIC1uYCwgLy8gQWdyZWUgdG8gdGVybXMgJiB1c2Ugbm9uIGludGVyYXRpdmUgZXhlY3V0aW9uLlxuICAgICAgICBgLS10ZXN0LWNlcnRgLFxuICAgICAgICBgLS1kbnMtZ29vZ2xlIGAsIC8vIHR5cGUgb2YgcGx1Z2luXG4gICAgICAgIGAtbSAke2VtYWlsfWAsXG4gICAgICAgIGAtZCB0YWxlYi5pb2AgLy8gZG9tYWluc1xuICAgIF0sXG4gICAgcHJvY2Vzc09wdGlvbiA9IHtcbiAgICAgICAgLy8gY3dkOiBgJHthcHBsaWNhdGlvblBhdGh9YCwgXG4gICAgICAgIHNoZWxsOiB0cnVlLCBcbiAgICAgICAgc3RkaW86IFswLDEsMl0sIFxuICAgICAgICBlbnY6IGVudmlyb25tZW50VmFyaWFibGVcbiAgICB9XG4gICAgbGV0IGNoaWxkUHJvY2VzcyA9IHNwYXduKHByb2Nlc3NDb21tYW5kLCBwcm9jZXNzQ29tbWFuZEFyZ3MsIHByb2Nlc3NPcHRpb24pXG4gICAgY2hpbGRQcm9jZXNzLm9uKCd1bmNhdWdodEV4Y2VwdGlvbicsIGZ1bmN0aW9uKGUpIHsgdGhyb3cgZSB9KVxuICAgIFxufSJdfQ==

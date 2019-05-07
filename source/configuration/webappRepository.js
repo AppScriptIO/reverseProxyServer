@@ -1,36 +1,37 @@
-let webappGithubProxyModule = [
-    {
-        name: 'talebWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/talebWebapp/master/setup/reverseProxy/production.redbirdConf.js',
-    },
-    {
-        name: 'gazitengWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/gazitengWebapp/master/setup/reverseProxy/production.redbirdConf.js'
-    },
-    {
-        name: 'animalsoundsWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/animalsoundsWebapp/master/setup/reverseProxy/production.redbirdConf.js'
-    },
-    {
-        name: 'radioscannerWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/radioscannerWebapp/master/setup/reverseProxy/production.redbirdConf.js'
-    },
-    {
-        name: 'naefswissWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/naefswissWebapp/master/setup/reverseProxy/production.redbirdConf.js'
-    },
-    {
-        name: 'dentristWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/dentristWebapp/master/setup/reverseProxy/production.redbirdConf.js'
-    },
-    {
-        name: 'assalammdWebapp.js',
-        url: 'https://raw.githubusercontent.com/myuseringithub/assalammdWebapp/master/setup/reverseProxy/production.redbirdConf.js'
-    },
-    // {
-    //     name: 'jenkins_continuousDeploymentServer.js',
-    //     url: 'https://raw.githubusercontent.com/myuseringithub/appDeploymentLifecycle/master/jenkins_continuousDeploymentServer.container/reverseProxy/production.redbirdConf.js'
-    // },
-]
+"use strict";let webappGithubProxyModule = [
+{
+  name: 'talebWebapp.js',
+  url: 'https://raw.githubusercontent.com/myuseringithub/talebWebapp/master/setup/reverseProxy/production.redbirdConf.js' },
 
-module.exports = webappGithubProxyModule
+{
+  name: 'gazitengWebapp.js',
+  url: 'https://raw.githubusercontent.com/myuseringithub/gazitengWebapp/master/setup/reverseProxy/production.redbirdConf.js' },
+
+{
+  name: 'animalsoundsWebapp.js',
+  url: 'https://raw.githubusercontent.com/myuseringithub/animalsoundsWebapp/master/setup/reverseProxy/production.redbirdConf.js' },
+
+{
+  name: 'radioscannerWebapp.js',
+  url: 'https://raw.githubusercontent.com/myuseringithub/radioscannerWebapp/master/setup/reverseProxy/production.redbirdConf.js' },
+
+{
+  name: 'naefswissWebapp.js',
+  url: 'https://raw.githubusercontent.com/myuseringithub/naefswissWebapp/master/setup/reverseProxy/production.redbirdConf.js' },
+
+{
+  name: 'dentristWebapp.js',
+  url: 'https://raw.githubusercontent.com/myuseringithub/dentristWebapp/master/setup/reverseProxy/production.redbirdConf.js' },
+
+{
+  name: 'assalammdWebapp.js',
+  url: 'https://raw.githubusercontent.com/myuseringithub/assalammdWebapp/master/setup/reverseProxy/production.redbirdConf.js' }];
+
+
+
+
+
+
+
+module.exports = webappGithubProxyModule;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NvdXJjZS9jb25maWd1cmF0aW9uL3dlYmFwcFJlcG9zaXRvcnkuanMiXSwibmFtZXMiOlsid2ViYXBwR2l0aHViUHJveHlNb2R1bGUiLCJuYW1lIiwidXJsIiwibW9kdWxlIiwiZXhwb3J0cyJdLCJtYXBwaW5ncyI6ImFBQUEsSUFBSUEsdUJBQXVCLEdBQUc7QUFDMUI7QUFDSUMsRUFBQUEsSUFBSSxFQUFFLGdCQURWO0FBRUlDLEVBQUFBLEdBQUcsRUFBRSxrSEFGVCxFQUQwQjs7QUFLMUI7QUFDSUQsRUFBQUEsSUFBSSxFQUFFLG1CQURWO0FBRUlDLEVBQUFBLEdBQUcsRUFBRSxxSEFGVCxFQUwwQjs7QUFTMUI7QUFDSUQsRUFBQUEsSUFBSSxFQUFFLHVCQURWO0FBRUlDLEVBQUFBLEdBQUcsRUFBRSx5SEFGVCxFQVQwQjs7QUFhMUI7QUFDSUQsRUFBQUEsSUFBSSxFQUFFLHVCQURWO0FBRUlDLEVBQUFBLEdBQUcsRUFBRSx5SEFGVCxFQWIwQjs7QUFpQjFCO0FBQ0lELEVBQUFBLElBQUksRUFBRSxvQkFEVjtBQUVJQyxFQUFBQSxHQUFHLEVBQUUsc0hBRlQsRUFqQjBCOztBQXFCMUI7QUFDSUQsRUFBQUEsSUFBSSxFQUFFLG1CQURWO0FBRUlDLEVBQUFBLEdBQUcsRUFBRSxxSEFGVCxFQXJCMEI7O0FBeUIxQjtBQUNJRCxFQUFBQSxJQUFJLEVBQUUsb0JBRFY7QUFFSUMsRUFBQUEsR0FBRyxFQUFFLHNIQUZULEVBekIwQixDQUE5Qjs7Ozs7Ozs7QUFtQ0FDLE1BQU0sQ0FBQ0MsT0FBUCxHQUFpQkosdUJBQWpCIiwic291cmNlc0NvbnRlbnQiOlsibGV0IHdlYmFwcEdpdGh1YlByb3h5TW9kdWxlID0gW1xuICAgIHtcbiAgICAgICAgbmFtZTogJ3RhbGViV2ViYXBwLmpzJyxcbiAgICAgICAgdXJsOiAnaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL215dXNlcmluZ2l0aHViL3RhbGViV2ViYXBwL21hc3Rlci9zZXR1cC9yZXZlcnNlUHJveHkvcHJvZHVjdGlvbi5yZWRiaXJkQ29uZi5qcycsXG4gICAgfSxcbiAgICB7XG4gICAgICAgIG5hbWU6ICdnYXppdGVuZ1dlYmFwcC5qcycsXG4gICAgICAgIHVybDogJ2h0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9teXVzZXJpbmdpdGh1Yi9nYXppdGVuZ1dlYmFwcC9tYXN0ZXIvc2V0dXAvcmV2ZXJzZVByb3h5L3Byb2R1Y3Rpb24ucmVkYmlyZENvbmYuanMnXG4gICAgfSxcbiAgICB7XG4gICAgICAgIG5hbWU6ICdhbmltYWxzb3VuZHNXZWJhcHAuanMnLFxuICAgICAgICB1cmw6ICdodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vbXl1c2VyaW5naXRodWIvYW5pbWFsc291bmRzV2ViYXBwL21hc3Rlci9zZXR1cC9yZXZlcnNlUHJveHkvcHJvZHVjdGlvbi5yZWRiaXJkQ29uZi5qcydcbiAgICB9LFxuICAgIHtcbiAgICAgICAgbmFtZTogJ3JhZGlvc2Nhbm5lcldlYmFwcC5qcycsXG4gICAgICAgIHVybDogJ2h0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9teXVzZXJpbmdpdGh1Yi9yYWRpb3NjYW5uZXJXZWJhcHAvbWFzdGVyL3NldHVwL3JldmVyc2VQcm94eS9wcm9kdWN0aW9uLnJlZGJpcmRDb25mLmpzJ1xuICAgIH0sXG4gICAge1xuICAgICAgICBuYW1lOiAnbmFlZnN3aXNzV2ViYXBwLmpzJyxcbiAgICAgICAgdXJsOiAnaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL215dXNlcmluZ2l0aHViL25hZWZzd2lzc1dlYmFwcC9tYXN0ZXIvc2V0dXAvcmV2ZXJzZVByb3h5L3Byb2R1Y3Rpb24ucmVkYmlyZENvbmYuanMnXG4gICAgfSxcbiAgICB7XG4gICAgICAgIG5hbWU6ICdkZW50cmlzdFdlYmFwcC5qcycsXG4gICAgICAgIHVybDogJ2h0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9teXVzZXJpbmdpdGh1Yi9kZW50cmlzdFdlYmFwcC9tYXN0ZXIvc2V0dXAvcmV2ZXJzZVByb3h5L3Byb2R1Y3Rpb24ucmVkYmlyZENvbmYuanMnXG4gICAgfSxcbiAgICB7XG4gICAgICAgIG5hbWU6ICdhc3NhbGFtbWRXZWJhcHAuanMnLFxuICAgICAgICB1cmw6ICdodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vbXl1c2VyaW5naXRodWIvYXNzYWxhbW1kV2ViYXBwL21hc3Rlci9zZXR1cC9yZXZlcnNlUHJveHkvcHJvZHVjdGlvbi5yZWRiaXJkQ29uZi5qcydcbiAgICB9LFxuICAgIC8vIHtcbiAgICAvLyAgICAgbmFtZTogJ2plbmtpbnNfY29udGludW91c0RlcGxveW1lbnRTZXJ2ZXIuanMnLFxuICAgIC8vICAgICB1cmw6ICdodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vbXl1c2VyaW5naXRodWIvYXBwRGVwbG95bWVudExpZmVjeWNsZS9tYXN0ZXIvamVua2luc19jb250aW51b3VzRGVwbG95bWVudFNlcnZlci5jb250YWluZXIvcmV2ZXJzZVByb3h5L3Byb2R1Y3Rpb24ucmVkYmlyZENvbmYuanMnXG4gICAgLy8gfSxcbl1cblxubW9kdWxlLmV4cG9ydHMgPSB3ZWJhcHBHaXRodWJQcm94eU1vZHVsZVxuIl19
