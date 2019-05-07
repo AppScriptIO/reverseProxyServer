@@ -1,6 +1,7 @@
 {
   "name": "proxy",
   "version": "1.0.0",
+  "main": "./entrypoint/programmaticAPI",
   "description": "",
   "dependencies": {
     "child-process-promise": "^2.2.1",
@@ -8,12 +9,12 @@
     "redbird": "^0.7.0"
   },
   "devDependencies": {
-    "@dependency/scriptManager": "https://github.com/AppScriptIO/scriptManager#semver:^1.x.x",
     "@dependency/deploymentScript": "https://github.com/AppScriptIO/deploymentScript#semver:^1.x.x",
+    "@dependency/javascriptStaticAnalysis": "https://github.com/AppScriptIO/javascriptStaticAnalysis#semver:^1.x.x",
     "@dependency/javascriptTranspilation": "https://github.com/AppScriptIO/javascriptTranspilation#semver:^1.x.x",
-    "@dependency/javascriptStaticAnalysis": "https://github.com/AppScriptIO/javascriptStaticAnalysis",
-    "typescript": "^3.3.3333"    
-},
+    "@dependency/scriptManager": "https://github.com/AppScriptIO/scriptManager",
+    "typescript": "^3.3.3333"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
