@@ -1,5 +1,6 @@
-const proxy = require('./proxy.js')
-const certbot = require('./letsencryptCertbot.js')
+"use strict";const proxy = require('./proxy.js');
+const certbot = require('./letsencryptCertbot.js');
 
-// certbot()
-proxy()
+
+proxy();
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NvdXJjZS9zZXJ2ZXIvZW50cnlwb2ludC5qcyJdLCJuYW1lcyI6WyJwcm94eSIsInJlcXVpcmUiLCJjZXJ0Ym90Il0sIm1hcHBpbmdzIjoiYUFBQSxNQUFNQSxLQUFLLEdBQUdDLE9BQU8sQ0FBQyxZQUFELENBQXJCO0FBQ0EsTUFBTUMsT0FBTyxHQUFHRCxPQUFPLENBQUMseUJBQUQsQ0FBdkI7OztBQUdBRCxLQUFLIiwic291cmNlc0NvbnRlbnQiOlsiY29uc3QgcHJveHkgPSByZXF1aXJlKCcuL3Byb3h5LmpzJylcbmNvbnN0IGNlcnRib3QgPSByZXF1aXJlKCcuL2xldHNlbmNyeXB0Q2VydGJvdC5qcycpXG5cbi8vIGNlcnRib3QoKVxucHJveHkoKSJdfQ==

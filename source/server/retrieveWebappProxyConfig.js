@@ -1,43 +1,44 @@
-const path = require('path')
+"use strict";const path = require('path');
 let filesystem = require('fs');
-let filesystemPromise = require('fs-promise'); // supports "fs-extra" functionality.
+let filesystemPromise = require('fs-promise');
 let childProcessPromise = require('child-process-promise');
-const config = require('../../setup/configuration/configuration.js')
+const config = require('../../setup/configuration/configuration.js');
 
 module.exports = function retrieveWebappProxyConfig() {
-    return new Promise(async function(resolve, reject) {
-        try {
+  return new Promise(async function (resolve, reject) {
+    try {
 
-            // Ensure folder exists
-            if (!filesystem.existsSync(config.proxyFolderPath)) filesystem.mkdirSync(config.proxyFolderPath) // create directory if doesn't exist.
-            await filesystemPromise.ensureDir(config.proxyFolderPath) // directory should be present
 
-            // Download webapp proxy configuration
-            await downloadWebappConfig({ 
-                fileConfigArray: config.webappGithubProxyModule,
-                downloadPath: config.proxyFolderPath
-            })
-            
-            resolve()
+      if (!filesystem.existsSync(config.proxyFolderPath)) filesystem.mkdirSync(config.proxyFolderPath);
+      await filesystemPromise.ensureDir(config.proxyFolderPath);
 
-        } catch (error) {
-            reject(error)
-        }
 
-    })
-}
+      await downloadWebappConfig({
+        fileConfigArray: config.webappGithubProxyModule,
+        downloadPath: config.proxyFolderPath });
+
+
+      resolve();
+
+    } catch (error) {
+      reject(error);
+    }
+
+  });
+};
 
 function downloadWebappConfig({ fileConfigArray, downloadPath }) {
 
-    // retrieve proxy configuration for each project.
-    let promiseArray = []    
-    fileConfigArray.map((file, i) => {
-        let repositoryURL = file.url, 
-            createdFilePath = path.join(downloadPath, file.name)
-        console.log(`• Downloading raw data from ${repositoryURL}.\n`)
-        let promise = childProcessPromise.exec(`curl -o ${createdFilePath} ${repositoryURL}`)
-        promiseArray.push(promise)
-    })
-    return Promise.all(promiseArray)          
-    
+
+  let promiseArray = [];
+  fileConfigArray.map((file, i) => {
+    let repositoryURL = file.url,
+    createdFilePath = path.join(downloadPath, file.name);
+    console.log(`• Downloading raw data from ${repositoryURL}.\n`);
+    let promise = childProcessPromise.exec(`curl -o ${createdFilePath} ${repositoryURL}`);
+    promiseArray.push(promise);
+  });
+  return Promise.all(promiseArray);
+
 }
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NvdXJjZS9zZXJ2ZXIvcmV0cmlldmVXZWJhcHBQcm94eUNvbmZpZy5qcyJdLCJuYW1lcyI6WyJwYXRoIiwicmVxdWlyZSIsImZpbGVzeXN0ZW0iLCJmaWxlc3lzdGVtUHJvbWlzZSIsImNoaWxkUHJvY2Vzc1Byb21pc2UiLCJjb25maWciLCJtb2R1bGUiLCJleHBvcnRzIiwicmV0cmlldmVXZWJhcHBQcm94eUNvbmZpZyIsIlByb21pc2UiLCJyZXNvbHZlIiwicmVqZWN0IiwiZXhpc3RzU3luYyIsInByb3h5Rm9sZGVyUGF0aCIsIm1rZGlyU3luYyIsImVuc3VyZURpciIsImRvd25sb2FkV2ViYXBwQ29uZmlnIiwiZmlsZUNvbmZpZ0FycmF5Iiwid2ViYXBwR2l0aHViUHJveHlNb2R1bGUiLCJkb3dubG9hZFBhdGgiLCJlcnJvciIsInByb21pc2VBcnJheSIsIm1hcCIsImZpbGUiLCJpIiwicmVwb3NpdG9yeVVSTCIsInVybCIsImNyZWF0ZWRGaWxlUGF0aCIsImpvaW4iLCJuYW1lIiwiY29uc29sZSIsImxvZyIsInByb21pc2UiLCJleGVjIiwicHVzaCIsImFsbCJdLCJtYXBwaW5ncyI6ImFBQUEsTUFBTUEsSUFBSSxHQUFHQyxPQUFPLENBQUMsTUFBRCxDQUFwQjtBQUNBLElBQUlDLFVBQVUsR0FBR0QsT0FBTyxDQUFDLElBQUQsQ0FBeEI7QUFDQSxJQUFJRSxpQkFBaUIsR0FBR0YsT0FBTyxDQUFDLFlBQUQsQ0FBL0I7QUFDQSxJQUFJRyxtQkFBbUIsR0FBR0gsT0FBTyxDQUFDLHVCQUFELENBQWpDO0FBQ0EsTUFBTUksTUFBTSxHQUFHSixPQUFPLENBQUMsNENBQUQsQ0FBdEI7O0FBRUFLLE1BQU0sQ0FBQ0MsT0FBUCxHQUFpQixTQUFTQyx5QkFBVCxHQUFxQztBQUNsRCxTQUFPLElBQUlDLE9BQUosQ0FBWSxnQkFBZUMsT0FBZixFQUF3QkMsTUFBeEIsRUFBZ0M7QUFDL0MsUUFBSTs7O0FBR0EsVUFBSSxDQUFDVCxVQUFVLENBQUNVLFVBQVgsQ0FBc0JQLE1BQU0sQ0FBQ1EsZUFBN0IsQ0FBTCxFQUFvRFgsVUFBVSxDQUFDWSxTQUFYLENBQXFCVCxNQUFNLENBQUNRLGVBQTVCO0FBQ3BELFlBQU1WLGlCQUFpQixDQUFDWSxTQUFsQixDQUE0QlYsTUFBTSxDQUFDUSxlQUFuQyxDQUFOOzs7QUFHQSxZQUFNRyxvQkFBb0IsQ0FBQztBQUN2QkMsUUFBQUEsZUFBZSxFQUFFWixNQUFNLENBQUNhLHVCQUREO0FBRXZCQyxRQUFBQSxZQUFZLEVBQUVkLE1BQU0sQ0FBQ1EsZUFGRSxFQUFELENBQTFCOzs7QUFLQUgsTUFBQUEsT0FBTzs7QUFFVixLQWRELENBY0UsT0FBT1UsS0FBUCxFQUFjO0FBQ1pULE1BQUFBLE1BQU0sQ0FBQ1MsS0FBRCxDQUFOO0FBQ0g7O0FBRUosR0FuQk0sQ0FBUDtBQW9CSCxDQXJCRDs7QUF1QkEsU0FBU0osb0JBQVQsQ0FBOEIsRUFBRUMsZUFBRixFQUFtQkUsWUFBbkIsRUFBOUIsRUFBaUU7OztBQUc3RCxNQUFJRSxZQUFZLEdBQUcsRUFBbkI7QUFDQUosRUFBQUEsZUFBZSxDQUFDSyxHQUFoQixDQUFvQixDQUFDQyxJQUFELEVBQU9DLENBQVAsS0FBYTtBQUM3QixRQUFJQyxhQUFhLEdBQUdGLElBQUksQ0FBQ0csR0FBekI7QUFDSUMsSUFBQUEsZUFBZSxHQUFHM0IsSUFBSSxDQUFDNEIsSUFBTCxDQUFVVCxZQUFWLEVBQXdCSSxJQUFJLENBQUNNLElBQTdCLENBRHRCO0FBRUFDLElBQUFBLE9BQU8sQ0FBQ0MsR0FBUixDQUFhLCtCQUE4Qk4sYUFBYyxLQUF6RDtBQUNBLFFBQUlPLE9BQU8sR0FBRzVCLG1CQUFtQixDQUFDNkIsSUFBcEIsQ0FBMEIsV0FBVU4sZUFBZ0IsSUFBR0YsYUFBYyxFQUFyRSxDQUFkO0FBQ0FKLElBQUFBLFlBQVksQ0FBQ2EsSUFBYixDQUFrQkYsT0FBbEI7QUFDSCxHQU5EO0FBT0EsU0FBT3ZCLE9BQU8sQ0FBQzBCLEdBQVIsQ0FBWWQsWUFBWixDQUFQOztBQUVIIiwic291cmNlc0NvbnRlbnQiOlsiY29uc3QgcGF0aCA9IHJlcXVpcmUoJ3BhdGgnKVxubGV0IGZpbGVzeXN0ZW0gPSByZXF1aXJlKCdmcycpO1xubGV0IGZpbGVzeXN0ZW1Qcm9taXNlID0gcmVxdWlyZSgnZnMtcHJvbWlzZScpOyAvLyBzdXBwb3J0cyBcImZzLWV4dHJhXCIgZnVuY3Rpb25hbGl0eS5cbmxldCBjaGlsZFByb2Nlc3NQcm9taXNlID0gcmVxdWlyZSgnY2hpbGQtcHJvY2Vzcy1wcm9taXNlJyk7XG5jb25zdCBjb25maWcgPSByZXF1aXJlKCcuLi8uLi9zZXR1cC9jb25maWd1cmF0aW9uL2NvbmZpZ3VyYXRpb24uanMnKVxuXG5tb2R1bGUuZXhwb3J0cyA9IGZ1bmN0aW9uIHJldHJpZXZlV2ViYXBwUHJveHlDb25maWcoKSB7XG4gICAgcmV0dXJuIG5ldyBQcm9taXNlKGFzeW5jIGZ1bmN0aW9uKHJlc29sdmUsIHJlamVjdCkge1xuICAgICAgICB0cnkge1xuXG4gICAgICAgICAgICAvLyBFbnN1cmUgZm9sZGVyIGV4aXN0c1xuICAgICAgICAgICAgaWYgKCFmaWxlc3lzdGVtLmV4aXN0c1N5bmMoY29uZmlnLnByb3h5Rm9sZGVyUGF0aCkpIGZpbGVzeXN0ZW0ubWtkaXJTeW5jKGNvbmZpZy5wcm94eUZvbGRlclBhdGgpIC8vIGNyZWF0ZSBkaXJlY3RvcnkgaWYgZG9lc24ndCBleGlzdC5cbiAgICAgICAgICAgIGF3YWl0IGZpbGVzeXN0ZW1Qcm9taXNlLmVuc3VyZURpcihjb25maWcucHJveHlGb2xkZXJQYXRoKSAvLyBkaXJlY3Rvcnkgc2hvdWxkIGJlIHByZXNlbnRcblxuICAgICAgICAgICAgLy8gRG93bmxvYWQgd2ViYXBwIHByb3h5IGNvbmZpZ3VyYXRpb25cbiAgICAgICAgICAgIGF3YWl0IGRvd25sb2FkV2ViYXBwQ29uZmlnKHsgXG4gICAgICAgICAgICAgICAgZmlsZUNvbmZpZ0FycmF5OiBjb25maWcud2ViYXBwR2l0aHViUHJveHlNb2R1bGUsXG4gICAgICAgICAgICAgICAgZG93bmxvYWRQYXRoOiBjb25maWcucHJveHlGb2xkZXJQYXRoXG4gICAgICAgICAgICB9KVxuICAgICAgICAgICAgXG4gICAgICAgICAgICByZXNvbHZlKClcblxuICAgICAgICB9IGNhdGNoIChlcnJvcikge1xuICAgICAgICAgICAgcmVqZWN0KGVycm9yKVxuICAgICAgICB9XG5cbiAgICB9KVxufVxuXG5mdW5jdGlvbiBkb3dubG9hZFdlYmFwcENvbmZpZyh7IGZpbGVDb25maWdBcnJheSwgZG93bmxvYWRQYXRoIH0pIHtcblxuICAgIC8vIHJldHJpZXZlIHByb3h5IGNvbmZpZ3VyYXRpb24gZm9yIGVhY2ggcHJvamVjdC5cbiAgICBsZXQgcHJvbWlzZUFycmF5ID0gW10gICAgXG4gICAgZmlsZUNvbmZpZ0FycmF5Lm1hcCgoZmlsZSwgaSkgPT4ge1xuICAgICAgICBsZXQgcmVwb3NpdG9yeVVSTCA9IGZpbGUudXJsLCBcbiAgICAgICAgICAgIGNyZWF0ZWRGaWxlUGF0aCA9IHBhdGguam9pbihkb3dubG9hZFBhdGgsIGZpbGUubmFtZSlcbiAgICAgICAgY29uc29sZS5sb2coYOKAoiBEb3dubG9hZGluZyByYXcgZGF0YSBmcm9tICR7cmVwb3NpdG9yeVVSTH0uXFxuYClcbiAgICAgICAgbGV0IHByb21pc2UgPSBjaGlsZFByb2Nlc3NQcm9taXNlLmV4ZWMoYGN1cmwgLW8gJHtjcmVhdGVkRmlsZVBhdGh9ICR7cmVwb3NpdG9yeVVSTH1gKVxuICAgICAgICBwcm9taXNlQXJyYXkucHVzaChwcm9taXNlKVxuICAgIH0pXG4gICAgcmV0dXJuIFByb21pc2UuYWxsKHByb21pc2VBcnJheSkgICAgICAgICAgXG4gICAgXG59Il19
