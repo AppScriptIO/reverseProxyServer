@@ -12,7 +12,7 @@ const ownConfiguration = {
     }, 
   },
   entrypoint: {
-    programmaticAPI: './server/entrypoint.js',
+    programmaticAPI: './server/script.js',
   },
   script,
   transpilation: {
