@@ -1,13 +1,15 @@
+const path = require('path')
+const resolvedModule = {
+  get deploymentScript() {
+    return path.dirname(require.resolve(`@dependency/deploymentScript/package.json`))
+  },
+}
+
 module.exports = {
-    install: {
-        file: './application/setup/entrypoint/install.js',
+  script: [
+    {
+      type: 'directory',
+      path: `${resolvedModule.deploymentScript}/script`,
     },
-    build: {
-        file: './application/setup/entrypoint/build.js',
-
-    },
-    run: {
-        file: './application/setup/entrypoint/run.js',
-
-    }
+  ],
 }

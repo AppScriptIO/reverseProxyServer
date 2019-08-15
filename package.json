@@ -3,6 +3,9 @@
   "version": "1.0.1",
   "main": "./entrypoint/programmaticAPI",
   "description": "",
+  "scripts": {
+    "buildAndRelease": "yarn run scriptManager shouldCompileScript=true JSProject/buildAndRelease \".moduleProject({})\""
+  },
   "dependencies": {
     "child-process-promise": "^2.2.1",
     "fs-promise": "^2.0.3",

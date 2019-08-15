@@ -959,8 +959,8 @@
     promise-events "^0.1.4"
 
 "@dependency/configurationManagement@https://github.com/AppScriptIO/configurationManagement#semver:^1.x.x":
-  version "1.0.3"
-  resolved "https://github.com/AppScriptIO/configurationManagement#67bf9784887a8f3c7ef2bd3ea8bad1a3a1e79ed3"
+  version "1.0.4"
+  resolved "https://github.com/AppScriptIO/configurationManagement#4b9ba191b7f9d1fbcfad46978d6c0e865852a4fe"
 
 "@dependency/databaseUtility@https://github.com/AppScriptIO/databaseUtility#semver:^1.x.x":
   version "1.0.1"
@@ -1009,8 +1009,8 @@
   resolved "https://github.com/AppScriptIO/installNodeJSModule#bd89671de6a050b5bfcf9326e07bd08a6de5a34c"
 
 "@dependency/javascriptStaticAnalysis@https://github.com/AppScriptIO/javascriptStaticAnalysis#semver:^1.x.x":
-  version "1.0.1"
-  resolved "https://github.com/AppScriptIO/javascriptStaticAnalysis#c4a221c4edeba9a6780ea230ef0016692994b8e6"
+  version "1.0.2"
+  resolved "https://github.com/AppScriptIO/javascriptStaticAnalysis#ddf7d2dfebb347b8cb47f67d1992620c22c20b64"
   dependencies:
     "@dependency/addModuleResolutionPath" "https://github.com/AppScriptIO/addModuleResolutionPath#semver:^1.x.x"
     "@typescript-eslint/eslint-plugin" "^1.4.2"
@@ -1024,8 +1024,8 @@
     typescript "^3.3.3333"
 
 "@dependency/javascriptTestRunner@git+https://github.com/AppScriptIO/javascriptTestRunner.git#semver:^1.x.x":
-  version "1.1.4"
-  resolved "git+https://github.com/AppScriptIO/javascriptTestRunner.git#0d40deb5930fd81f40ddeb4b4a5ad8eb6cff1290"
+  version "1.1.5"
+  resolved "git+https://github.com/AppScriptIO/javascriptTestRunner.git#af7d11df22b83791dbf1335bd077b7195c128032"
   dependencies:
     "@dependency/javascriptTranspilation" "https://github.com/AppScriptIO/javascriptTranspilation#semver:^1.x.x"
     "@dependency/nodejsLiveReload" "https://github.com/AppScriptIO/nodejsLiveReload#semver:^1.x.x"
@@ -1037,8 +1037,8 @@
     sinon "*"
 
 "@dependency/javascriptTranspilation@https://github.com/AppScriptIO/javascriptTranspilation#semver:^1.x.x":
-  version "1.2.4"
-  resolved "https://github.com/AppScriptIO/javascriptTranspilation#612fa722b7eabb78de5415734a013603ca626f5a"
+  version "1.2.5"
+  resolved "https://github.com/AppScriptIO/javascriptTranspilation#0f1ee2358fd5850ba8ce5dc913fd30dc0574b316"
   dependencies:
     "@babel/babel-plugin-functionSentProxyImplementation" "https://github.com/AppScriptIO/babel-plugin-functionSentProxyImplementation#semver:^1.x.x"
     "@babel/cli" "*"
@@ -1106,17 +1106,17 @@
   resolved "https://github.com/AppScriptIO/namedCurry#f0c22dccaa1a20751b5330db48b6699f5a949f37"
 
 "@dependency/nodejsLiveReload@git+https://github.com/AppScriptIO/nodejsLiveReload.git#semver:^1.x.x":
-  version "1.0.2"
-  resolved "git+https://github.com/AppScriptIO/nodejsLiveReload.git#946171f6c271e3d568a9034b7dce9e4f563e074d"
+  version "1.0.3"
+  resolved "git+https://github.com/AppScriptIO/nodejsLiveReload.git#269ef8dc4c9ba82f4b4df441f46a30de150586f2"
   dependencies:
     browser-sync "*"
     chokidar "*"
     core-js "*"
 
 "@dependency/nodejsLiveReload@https://github.com/AppScriptIO/nodejsLiveReload#semver:^1.x.x":
-  version "1.0.2"
-  uid "946171f6c271e3d568a9034b7dce9e4f563e074d"
-  resolved "https://github.com/AppScriptIO/nodejsLiveReload#946171f6c271e3d568a9034b7dce9e4f563e074d"
+  version "1.0.3"
+  uid "269ef8dc4c9ba82f4b4df441f46a30de150586f2"
+  resolved "https://github.com/AppScriptIO/nodejsLiveReload#269ef8dc4c9ba82f4b4df441f46a30de150586f2"
   dependencies:
     browser-sync "*"
     chokidar "*"
@@ -3656,9 +3656,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.3.191:
-  version "1.3.227"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.227.tgz#8dccc63b6456b7b63007b965f79920b99e86ddc0"
-  integrity sha512-LQJmt0QcUzC/mLjG+ha5QhXgNQ2T2BOxRecuaU/hd92RnZt6G3ZGONsAe7Xvo9SoBvre/POElMoyK77mXjrr3w==
+  version "1.3.228"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.228.tgz#8b1804bae329e2029ad6b25fbb15d9200fb12894"
+  integrity sha512-m3k/OYd9sCLFOAtvl6vqgXfzbG8iY1mLYg0fQjQGB46LpPudYDUFUmiSmj2meJsHEUABWXH1ZRSCeWj265v2RQ==
 
 emitter-component@^1.1.1:
   version "1.1.1"
