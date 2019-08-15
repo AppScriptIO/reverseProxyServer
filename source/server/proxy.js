@@ -1,119 +1,92 @@
-const path = require('path') 
-const filesystem = require('fs')
+"use strict";const path = require('path');
+const filesystem = require('fs');
 const url = require('url');
-const redbird = require('redbird')
-const config = require('../../setup/configuration/configuration.js')
-const retrieveWebappProxyConfig = require('./retrieveWebappProxyConfig.js')
+const redbird = require('redbird');
+const config = require('../../setup/configuration/configuration.js');
+const retrieveWebappProxyConfig = require('./retrieveWebappProxyConfig.js');
 
 module.exports = function () {
 
-    // Setup global Redbird configuration.
-    const proxy = redbird({
-        port: 80,
-        xfwd: true, 
-        // letsencrypt: {
-        //     port: letsencryptPort, 
-        //     path: certificateBaseFolder
-        // },
-        ssl: { // Optional SSL proxying.
-            port: 443, // SSL port the proxy will listen to.
-            // // Default certificates
-            // key: keyPath,
-            // cert: certPath,
-            // ca: caPath // Optional.
-            redirect: true // Disable HTTPS autoredirect to this route.
-        }
-    });
 
-    // will be called when a proxy route is not found.
-    proxy.notFound((req, res) => { 
-        if (req.headers.host.slice(0, 4) === 'www.') { // if subdomain is 'www'
-            let parsedRequest = url.parse(req.url)
-            let newHost = req.headers.host.slice(4)
-            let newLocation = `${parsedRequest.protocol || 'http'}://${newHost}${parsedRequest.path || '/'}`
-            console.log(`• Redicrecting www to: ${newLocation}`)
-            res.writeHead(301, { 'Location': newLocation })
-            res.end('Redirecting...')
-        } else {
-            res.statusCode = 404
-            res.write('Oops.. No app found to handle your request.')
-            res.end()
-        }
-    })
+  const proxy = redbird({
+    port: 80,
+    xfwd: true,
 
-    // Downlaod and execute each webapp proxy configuration.
-    retrieveWebappProxyConfig()
-        .then(function() {
-            // Execute webapp proxy configuration
-            filesystem.readdirSync(config.proxyFolderPath).forEach(function(file) {
-                if(file.substr(file.lastIndexOf('.') + 1)) { // Ensure file is being read
-                    let filePath = path.join(config.proxyFolderPath, file)
-                    let func;
-                    try {
-                        func = require(filePath)
-                    } catch (error) {
-                        throw error
-                    }
-                    console.log(`\n\n\n\n• Adding ${filePath} to proxy.`)
-                    console.log(func)
-                    let proxyConfigArray = func() // initialize proxy configuration with the current running proxy app.
-                    proxyConfigArray.forEach(function(proxyConfig) {
-                        registerProxyConfig(proxyConfig)
-                    })
-                }
-            })
-        })
-    
-    function registerProxyConfig(proxyConfig) {
-        if(proxyConfig.ssl) { // HTTPS
-            let hostname = (proxyConfig.subdomain) ? `${proxyConfig.subdomain}.${proxyConfig.domain}` : proxyConfig.domain;
-            let certificateFolder = path.join(config.certificateBaseFolder, proxyConfig.domain)
-            proxy.register(
-                hostname,
-                proxyConfig.containerRoute,
-                {
-                    ssl: { // all wildcard certificates are saved under the main domain folder.
-                        // ca: path.join( certificateFolder, 'chain.pem'), // certificate authority - or served separately.
-                        key: path.join( certificateFolder, 'privkey.pem'), // private key
-                        cert: path.join( certificateFolder, 'fullchain.pem') // public key - the public certificate should be combination of cert+chain i.e. "cat cert.pem chain.pem > fullchain.pem"
-                    }
-                }
-            )
-        } else { // HTTP
-            let hostname = (proxyConfig.subdomain) ? `${proxyConfig.subdomain}.${proxyConfig.domain}` : proxyConfig.domain;
-            proxy.register(
-                hostname, 
-                proxyConfig.containerRoute
-            )
-        }
+
+
+
+    ssl: {
+      port: 443,
+
+
+
+
+      redirect: true } });
+
+
+
+
+  proxy.notFound((req, res) => {
+    if (req.headers.host.slice(0, 4) === 'www.') {
+      let parsedRequest = url.parse(req.url);
+      let newHost = req.headers.host.slice(4);
+      let newLocation = `${parsedRequest.protocol || 'http'}://${newHost}${parsedRequest.path || '/'}`;
+      console.log(`• Redicrecting www to: ${newLocation}`);
+      res.writeHead(301, { 'Location': newLocation });
+      res.end('Redirecting...');
+    } else {
+      res.statusCode = 404;
+      res.write('Oops.. No app found to handle your request.');
+      res.end();
     }
+  });
 
-}
 
-// _____________________________________________________________________________
-// Using express with redbird - https://github.com/OptimalBits/redbird/issues/83
+  retrieveWebappProxyConfig().
+  then(function () {
 
-// var express  = require('express');
-// var app      = express();
-// var httpProxy = require('http-proxy');
-// var apiProxy = httpProxy.createProxyServer();
-// var serverOne = 'http://google.com',
-//     ServerTwo = 'http://yahoo.com',
-//     ServerThree = 'http://example.com';
- 
-// app.all("/app1/*", function(req, res) {
-//     console.log('redirecting to Server1');
-//     apiProxy.web(req, res, {target: serverOne});
-// });
+    filesystem.readdirSync(config.proxyFolderPath).forEach(function (file) {
+      if (file.substr(file.lastIndexOf('.') + 1)) {
+        let filePath = path.join(config.proxyFolderPath, file);
+        let func;
+        try {
+          func = require(filePath);
+        } catch (error) {
+          throw error;
+        }
+        console.log(`\n\n\n\n• Adding ${filePath} to proxy.`);
+        console.log(func);
+        let proxyConfigArray = func();
+        proxyConfigArray.forEach(function (proxyConfig) {
+          registerProxyConfig(proxyConfig);
+        });
+      }
+    });
+  });
 
-// app.all("/app2/*", function(req, res) {
-//     console.log('redirecting to Server2');
-//     apiProxy.web(req, res, {target: ServerTwo});
-// });
+  function registerProxyConfig(proxyConfig) {
+    if (proxyConfig.ssl) {
+      let hostname = proxyConfig.subdomain ? `${proxyConfig.subdomain}.${proxyConfig.domain}` : proxyConfig.domain;
+      let certificateFolder = path.join(config.certificateBaseFolder, proxyConfig.domain);
+      proxy.register(
+      hostname,
+      proxyConfig.containerRoute,
+      {
+        ssl: {
 
-// app.all("/app2/*", function(req, res) {
-//     console.log('redirecting to Server3');
-//     apiProxy.web(req, res, {target: ServerThree});
-// });
+          key: path.join(certificateFolder, 'privkey.pem'),
+          cert: path.join(certificateFolder, 'fullchain.pem') } });
 
-// app.listen(80);
+
+
+    } else {
+      let hostname = proxyConfig.subdomain ? `${proxyConfig.subdomain}.${proxyConfig.domain}` : proxyConfig.domain;
+      proxy.register(
+      hostname,
+      proxyConfig.containerRoute);
+
+    }
+  }
+
+};
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NvdXJjZS9zZXJ2ZXIvcHJveHkuanMiXSwibmFtZXMiOlsicGF0aCIsInJlcXVpcmUiLCJmaWxlc3lzdGVtIiwidXJsIiwicmVkYmlyZCIsImNvbmZpZyIsInJldHJpZXZlV2ViYXBwUHJveHlDb25maWciLCJtb2R1bGUiLCJleHBvcnRzIiwicHJveHkiLCJwb3J0IiwieGZ3ZCIsInNzbCIsInJlZGlyZWN0Iiwibm90Rm91bmQiLCJyZXEiLCJyZXMiLCJoZWFkZXJzIiwiaG9zdCIsInNsaWNlIiwicGFyc2VkUmVxdWVzdCIsInBhcnNlIiwibmV3SG9zdCIsIm5ld0xvY2F0aW9uIiwicHJvdG9jb2wiLCJjb25zb2xlIiwibG9nIiwid3JpdGVIZWFkIiwiZW5kIiwic3RhdHVzQ29kZSIsIndyaXRlIiwidGhlbiIsInJlYWRkaXJTeW5jIiwicHJveHlGb2xkZXJQYXRoIiwiZm9yRWFjaCIsImZpbGUiLCJzdWJzdHIiLCJsYXN0SW5kZXhPZiIsImZpbGVQYXRoIiwiam9pbiIsImZ1bmMiLCJlcnJvciIsInByb3h5Q29uZmlnQXJyYXkiLCJwcm94eUNvbmZpZyIsInJlZ2lzdGVyUHJveHlDb25maWciLCJob3N0bmFtZSIsInN1YmRvbWFpbiIsImRvbWFpbiIsImNlcnRpZmljYXRlRm9sZGVyIiwiY2VydGlmaWNhdGVCYXNlRm9sZGVyIiwicmVnaXN0ZXIiLCJjb250YWluZXJSb3V0ZSIsImtleSIsImNlcnQiXSwibWFwcGluZ3MiOiJhQUFBLE1BQU1BLElBQUksR0FBR0MsT0FBTyxDQUFDLE1BQUQsQ0FBcEI7QUFDQSxNQUFNQyxVQUFVLEdBQUdELE9BQU8sQ0FBQyxJQUFELENBQTFCO0FBQ0EsTUFBTUUsR0FBRyxHQUFHRixPQUFPLENBQUMsS0FBRCxDQUFuQjtBQUNBLE1BQU1HLE9BQU8sR0FBR0gsT0FBTyxDQUFDLFNBQUQsQ0FBdkI7QUFDQSxNQUFNSSxNQUFNLEdBQUdKLE9BQU8sQ0FBQyw0Q0FBRCxDQUF0QjtBQUNBLE1BQU1LLHlCQUF5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QUFHSCxXQUFXLENBQUNJLE1BQU8sRUFBekUsR0FBNkVKLFdBQVcsQ0FBQ0ksTUFBeEc7QUFDQSxVQUFJQyxpQkFBaUIsR0FBR2hELElBQUksQ0FBQ3VDLElBQUwsQ0FBVWxDLE1BQU0sQ0FBQzRDLHFCQUFqQixFQUF3Q04sV0FBVyxDQUFDSSxNQUFwRCxDQUF4QjtBQUNBdEMsTUFBQUEsS0FBSyxDQUFDeUMsUUFBTjtBQUNJTCxNQUFBQSxRQURKO0FBRUlGLE1BQUFBLFdBQVcsQ0FBQ1EsY0FGaEI7QUFHSTtBQUNJdkMsUUFBQUEsR0FBRyxFQUFFOztBQUVEd0MsVUFBQUEsR0FBRyxFQUFFcEQsSUFBSSxDQUFDdUMsSUFBTCxDQUFXUyxpQkFBWCxFQUE4QixhQUE5QixDQUZKO0FBR0RLLFVBQUFBLElBQUksRUFBRXJELElBQUksQ0FBQ3VDLElBQUwsQ0FBV1MsaUJBQVgsRUFBOEIsZUFBOUIsQ0FITCxFQURULEVBSEo7Ozs7QUFXSCxLQWRELE1BY087QUFDSCxVQUFJSCxRQUFRLEdBQUlGLFdBQVcsQ0FBQ0csU0FBYixHQUEyQixHQUFFSCxXQUFXLENBQUNHLFNBQVUsSUFBR0gsV0FBVyxDQUFDSSxNQUFPLEVBQXpFLEdBQTZFSixXQUFXLENBQUNJLE1BQXhHO0FBQ0F0QyxNQUFBQSxLQUFLLENBQUN5QyxRQUFOO0FBQ0lMLE1BQUFBLFFBREo7QUFFSUYsTUFBQUEsV0FBVyxDQUFDUSxjQUZoQjs7QUFJSDtBQUNKOztBQUVKLENBbkZEIiwic291cmNlc0NvbnRlbnQiOlsiY29uc3QgcGF0aCA9IHJlcXVpcmUoJ3BhdGgnKSBcbmNvbnN0IGZpbGVzeXN0ZW0gPSByZXF1aXJlKCdmcycpXG5jb25zdCB1cmwgPSByZXF1aXJlKCd1cmwnKTtcbmNvbnN0IHJlZGJpcmQgPSByZXF1aXJlKCdyZWRiaXJkJylcbmNvbnN0IGNvbmZpZyA9IHJlcXVpcmUoJy4uLy4uL3NldHVwL2NvbmZpZ3VyYXRpb24vY29uZmlndXJhdGlvbi5qcycpXG5jb25zdCByZXRyaWV2ZVdlYmFwcFByb3h5Q29uZmlnID0gcmVxdWlyZSgnLi9yZXRyaWV2ZVdlYmFwcFByb3h5Q29uZmlnLmpzJylcblxubW9kdWxlLmV4cG9ydHMgPSBmdW5jdGlvbiAoKSB7XG5cbiAgICAvLyBTZXR1cCBnbG9iYWwgUmVkYmlyZCBjb25maWd1cmF0aW9uLlxuICAgIGNvbnN0IHByb3h5ID0gcmVkYmlyZCh7XG4gICAgICAgIHBvcnQ6IDgwLFxuICAgICAgICB4ZndkOiB0cnVlLCBcbiAgICAgICAgLy8gbGV0c2VuY3J5cHQ6IHtcbiAgICAgICAgLy8gICAgIHBvcnQ6IGxldHNlbmNyeXB0UG9ydCwgXG4gICAgICAgIC8vICAgICBwYXRoOiBjZXJ0aWZpY2F0ZUJhc2VGb2xkZXJcbiAgICAgICAgLy8gfSxcbiAgICAgICAgc3NsOiB7IC8vIE9wdGlvbmFsIFNTTCBwcm94eWluZy5cbiAgICAgICAgICAgIHBvcnQ6IDQ0MywgLy8gU1NMIHBvcnQgdGhlIHByb3h5IHdpbGwgbGlzdGVuIHRvLlxuICAgICAgICAgICAgLy8gLy8gRGVmYXVsdCBjZXJ0aWZpY2F0ZXNcbiAgICAgICAgICAgIC8vIGtleToga2V5UGF0aCxcbiAgICAgICAgICAgIC8vIGNlcnQ6IGNlcnRQYXRoLFxuICAgICAgICAgICAgLy8gY2E6IGNhUGF0aCAvLyBPcHRpb25hbC5cbiAgICAgICAgICAgIHJlZGlyZWN0OiB0cnVlIC8vIERpc2FibGUgSFRUUFMgYXV0b3JlZGlyZWN0IHRvIHRoaXMgcm91dGUuXG4gICAgICAgIH1cbiAgICB9KTtcblxuICAgIC8vIHdpbGwgYmUgY2FsbGVkIHdoZW4gYSBwcm94eSByb3V0ZSBpcyBub3QgZm91bmQuXG4gICAgcHJveHkubm90Rm91bmQoKHJlcSwgcmVzKSA9PiB7IFxuICAgICAgICBpZiAocmVxLmhlYWRlcnMuaG9zdC5zbGljZSgwLCA0KSA9PT0gJ3d3dy4nKSB7IC8vIGlmIHN1YmRvbWFpbiBpcyAnd3d3J1xuICAgICAgICAgICAgbGV0IHBhcnNlZFJlcXVlc3QgPSB1cmwucGFyc2UocmVxLnVybClcbiAgICAgICAgICAgIGxldCBuZXdIb3N0ID0gcmVxLmhlYWRlcnMuaG9zdC5zbGljZSg0KVxuICAgICAgICAgICAgbGV0IG5ld0xvY2F0aW9uID0gYCR7cGFyc2VkUmVxdWVzdC5wcm90b2NvbCB8fCAnaHR0cCd9Oi8vJHtuZXdIb3N0fSR7cGFyc2VkUmVxdWVzdC5wYXRoIHx8ICcvJ31gXG4gICAgICAgICAgICBjb25zb2xlLmxvZyhg4oCiIFJlZGljcmVjdGluZyB3d3cgdG86ICR7bmV3TG9jYXRpb259YClcbiAgICAgICAgICAgIHJlcy53cml0ZUhlYWQoMzAxLCB7ICdMb2NhdGlvbic6IG5ld0xvY2F0aW9uIH0pXG4gICAgICAgICAgICByZXMuZW5kKCdSZWRpcmVjdGluZy4uLicpXG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgICByZXMuc3RhdHVzQ29kZSA9IDQwNFxuICAgICAgICAgICAgcmVzLndyaXRlKCdPb3BzLi4gTm8gYXBwIGZvdW5kIHRvIGhhbmRsZSB5b3VyIHJlcXVlc3QuJylcbiAgICAgICAgICAgIHJlcy5lbmQoKVxuICAgICAgICB9XG4gICAgfSlcblxuICAgIC8vIERvd25sYW9kIGFuZCBleGVjdXRlIGVhY2ggd2ViYXBwIHByb3h5IGNvbmZpZ3VyYXRpb24uXG4gICAgcmV0cmlldmVXZWJhcHBQcm94eUNvbmZpZygpXG4gICAgICAgIC50aGVuKGZ1bmN0aW9uKCkge1xuICAgICAgICAgICAgLy8gRXhlY3V0ZSB3ZWJhcHAgcHJveHkgY29uZmlndXJhdGlvblxuICAgICAgICAgICAgZmlsZXN5c3RlbS5yZWFkZGlyU3luYyhjb25maWcucHJveHlGb2xkZXJQYXRoKS5mb3JFYWNoKGZ1bmN0aW9uKGZpbGUpIHtcbiAgICAgICAgICAgICAgICBpZihmaWxlLnN1YnN0cihmaWxlLmxhc3RJbmRleE9mKCcuJykgKyAxKSkgeyAvLyBFbnN1cmUgZmlsZSBpcyBiZWluZyByZWFkXG4gICAgICAgICAgICAgICAgICAgIGxldCBmaWxlUGF0aCA9IHBhdGguam9pbihjb25maWcucHJveHlGb2xkZXJQYXRoLCBmaWxlKVxuICAgICAgICAgICAgICAgICAgICBsZXQgZnVuYztcbiAgICAgICAgICAgICAgICAgICAgdHJ5IHtcbiAgICAgICAgICAgICAgICAgICAgICAgIGZ1bmMgPSByZXF1aXJlKGZpbGVQYXRoKVxuICAgICAgICAgICAgICAgICAgICB9IGNhdGNoIChlcnJvcikge1xuICAgICAgICAgICAgICAgICAgICAgICAgdGhyb3cgZXJyb3JcbiAgICAgICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgICAgICBjb25zb2xlLmxvZyhgXFxuXFxuXFxuXFxu4oCiIEFkZGluZyAke2ZpbGVQYXRofSB0byBwcm94eS5gKVxuICAgICAgICAgICAgICAgICAgICBjb25zb2xlLmxvZyhmdW5jKVxuICAgICAgICAgICAgICAgICAgICBsZXQgcHJveHlDb25maWdBcnJheSA9IGZ1bmMoKSAvLyBpbml0aWFsaXplIHByb3h5IGNvbmZpZ3VyYXRpb24gd2l0aCB0aGUgY3VycmVudCBydW5uaW5nIHByb3h5IGFwcC5cbiAgICAgICAgICAgICAgICAgICAgcHJveHlDb25maWdBcnJheS5mb3JFYWNoKGZ1bmN0aW9uKHByb3h5Q29uZmlnKSB7XG4gICAgICAgICAgICAgICAgICAgICAgICByZWdpc3RlclByb3h5Q29uZmlnKHByb3h5Q29uZmlnKVxuICAgICAgICAgICAgICAgICAgICB9KVxuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgIH0pXG4gICAgICAgIH0pXG4gICAgXG4gICAgZnVuY3Rpb24gcmVnaXN0ZXJQcm94eUNvbmZpZyhwcm94eUNvbmZpZykge1xuICAgICAgICBpZihwcm94eUNvbmZpZy5zc2wpIHsgLy8gSFRUUFNcbiAgICAgICAgICAgIGxldCBob3N0bmFtZSA9IChwcm94eUNvbmZpZy5zdWJkb21haW4pID8gYCR7cHJveHlDb25maWcuc3ViZG9tYWlufS4ke3Byb3h5Q29uZmlnLmRvbWFpbn1gIDogcHJveHlDb25maWcuZG9tYWluO1xuICAgICAgICAgICAgbGV0IGNlcnRpZmljYXRlRm9sZGVyID0gcGF0aC5qb2luKGNvbmZpZy5jZXJ0aWZpY2F0ZUJhc2VGb2xkZXIsIHByb3h5Q29uZmlnLmRvbWFpbilcbiAgICAgICAgICAgIHByb3h5LnJlZ2lzdGVyKFxuICAgICAgICAgICAgICAgIGhvc3RuYW1lLFxuICAgICAgICAgICAgICAgIHByb3h5Q29uZmlnLmNvbnRhaW5lclJvdXRlLFxuICAgICAgICAgICAgICAgIHtcbiAgICAgICAgICAgICAgICAgICAgc3NsOiB7IC8vIGFsbCB3aWxkY2FyZCBjZXJ0aWZpY2F0ZXMgYXJlIHNhdmVkIHVuZGVyIHRoZSBtYWluIGRvbWFpbiBmb2xkZXIuXG4gICAgICAgICAgICAgICAgICAgICAgICAvLyBjYTogcGF0aC5qb2luKCBjZXJ0aWZpY2F0ZUZvbGRlciwgJ2NoYWluLnBlbScpLCAvLyBjZXJ0aWZpY2F0ZSBhdXRob3JpdHkgLSBvciBzZXJ2ZWQgc2VwYXJhdGVseS5cbiAgICAgICAgICAgICAgICAgICAgICAgIGtleTogcGF0aC5qb2luKCBjZXJ0aWZpY2F0ZUZvbGRlciwgJ3ByaXZrZXkucGVtJyksIC8vIHByaXZhdGUga2V5XG4gICAgICAgICAgICAgICAgICAgICAgICBjZXJ0OiBwYXRoLmpvaW4oIGNlcnRpZmljYXRlRm9sZGVyLCAnZnVsbGNoYWluLnBlbScpIC8vIHB1YmxpYyBrZXkgLSB0aGUgcHVibGljIGNlcnRpZmljYXRlIHNob3VsZCBiZSBjb21iaW5hdGlvbiBvZiBjZXJ0K2NoYWluIGkuZS4gXCJjYXQgY2VydC5wZW0gY2hhaW4ucGVtID4gZnVsbGNoYWluLnBlbVwiXG4gICAgICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICApXG4gICAgICAgIH0gZWxzZSB7IC8vIEhUVFBcbiAgICAgICAgICAgIGxldCBob3N0bmFtZSA9IChwcm94eUNvbmZpZy5zdWJkb21haW4pID8gYCR7cHJveHlDb25maWcuc3ViZG9tYWlufS4ke3Byb3h5Q29uZmlnLmRvbWFpbn1gIDogcHJveHlDb25maWcuZG9tYWluO1xuICAgICAgICAgICAgcHJveHkucmVnaXN0ZXIoXG4gICAgICAgICAgICAgICAgaG9zdG5hbWUsIFxuICAgICAgICAgICAgICAgIHByb3h5Q29uZmlnLmNvbnRhaW5lclJvdXRlXG4gICAgICAgICAgICApXG4gICAgICAgIH1cbiAgICB9XG5cbn1cblxuLy8gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19cbi8vIFVzaW5nIGV4cHJlc3Mgd2l0aCByZWRiaXJkIC0gaHR0cHM6Ly9naXRodWIuY29tL09wdGltYWxCaXRzL3JlZGJpcmQvaXNzdWVzLzgzXG5cbi8vIHZhciBleHByZXNzICA9IHJlcXVpcmUoJ2V4cHJlc3MnKTtcbi8vIHZhciBhcHAgICAgICA9IGV4cHJlc3MoKTtcbi8vIHZhciBodHRwUHJveHkgPSByZXF1aXJlKCdodHRwLXByb3h5Jyk7XG4vLyB2YXIgYXBpUHJveHkgPSBodHRwUHJveHkuY3JlYXRlUHJveHlTZXJ2ZXIoKTtcbi8vIHZhciBzZXJ2ZXJPbmUgPSAnaHR0cDovL2dvb2dsZS5jb20nLFxuLy8gICAgIFNlcnZlclR3byA9ICdodHRwOi8veWFob28uY29tJyxcbi8vICAgICBTZXJ2ZXJUaHJlZSA9ICdodHRwOi8vZXhhbXBsZS5jb20nO1xuIFxuLy8gYXBwLmFsbChcIi9hcHAxLypcIiwgZnVuY3Rpb24ocmVxLCByZXMpIHtcbi8vICAgICBjb25zb2xlLmxvZygncmVkaXJlY3RpbmcgdG8gU2VydmVyMScpO1xuLy8gICAgIGFwaVByb3h5LndlYihyZXEsIHJlcywge3RhcmdldDogc2VydmVyT25lfSk7XG4vLyB9KTtcblxuLy8gYXBwLmFsbChcIi9hcHAyLypcIiwgZnVuY3Rpb24ocmVxLCByZXMpIHtcbi8vICAgICBjb25zb2xlLmxvZygncmVkaXJlY3RpbmcgdG8gU2VydmVyMicpO1xuLy8gICAgIGFwaVByb3h5LndlYihyZXEsIHJlcywge3RhcmdldDogU2VydmVyVHdvfSk7XG4vLyB9KTtcblxuLy8gYXBwLmFsbChcIi9hcHAyLypcIiwgZnVuY3Rpb24ocmVxLCByZXMpIHtcbi8vICAgICBjb25zb2xlLmxvZygncmVkaXJlY3RpbmcgdG8gU2VydmVyMycpO1xuLy8gICAgIGFwaVByb3h5LndlYihyZXEsIHJlcywge3RhcmdldDogU2VydmVyVGhyZWV9KTtcbi8vIH0pO1xuXG4vLyBhcHAubGlzdGVuKDgwKTtcbiJdfQ==

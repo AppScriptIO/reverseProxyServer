@@ -1,19 +1,19 @@
-const path = require('path')
+"use strict";const path = require('path');
 
 let projectPath = '/project',
-    applicationPath = path.join(projectPath, 'application'),
-    webappGithubProxyModule = require('./webappRepository.js'),
-    // letsencryptPort = process.env.LETSENCRYPT_PORT,
-    email = process.env.EMAIL,
-    proxyFolderPath = path.join(applicationPath, 'data/webappProxyConfig'),
-    certificateBaseFolder = path.join(applicationPath, 'certificate', 'live')
+applicationPath = path.join(projectPath, 'application'),
+webappGithubProxyModule = require('./webappRepository.js'),
+
+email = process.env.EMAIL,
+proxyFolderPath = path.join(applicationPath, 'data/webappProxyConfig'),
+certificateBaseFolder = path.join(applicationPath, 'certificate', 'live');
 
 module.exports = {
-    projectPath, 
-    applicationPath,
-    // letsencryptPort,
-    webappGithubProxyModule,
-    email,
-    proxyFolderPath,
-    certificateBaseFolder
-}
+  projectPath,
+  applicationPath,
+
+  webappGithubProxyModule,
+  email,
+  proxyFolderPath,
+  certificateBaseFolder };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NvdXJjZS9jb25maWd1cmF0aW9uL2NvbmZpZ3VyYXRpb24uanMiXSwibmFtZXMiOlsicGF0aCIsInJlcXVpcmUiLCJwcm9qZWN0UGF0aCIsImFwcGxpY2F0aW9uUGF0aCIsImpvaW4iLCJ3ZWJhcHBHaXRodWJQcm94eU1vZHVsZSIsImVtYWlsIiwicHJvY2VzcyIsImVudiIsIkVNQUlMIiwicHJveHlGb2xkZXJQYXRoIiwiY2VydGlmaWNhdGVCYXNlRm9sZGVyIiwibW9kdWxlIiwiZXhwb3J0cyJdLCJtYXBwaW5ncyI6ImFBQUEsTUFBTUEsSUFBSSxHQUFHQyxPQUFPLENBQUMsTUFBRCxDQUFwQjs7QUFFQSxJQUFJQyxXQUFXLEdBQUcsVUFBbEI7QUFDSUMsZUFBZSxHQUFHSCxJQUFJLENBQUNJLElBQUwsQ0FBVUYsV0FBVixFQUF1QixhQUF2QixDQUR0QjtBQUVJRyx1QkFBdUIsR0FBR0osT0FBTyxDQUFDLHVCQUFELENBRnJDOztBQUlJSyxLQUFLLEdBQUdDLE9BQU8sQ0FBQ0MsR0FBUixDQUFZQyxLQUp4QjtBQUtJQyxlQUFlLEdBQUdWLElBQUksQ0FBQ0ksSUFBTCxDQUFVRCxlQUFWLEVBQTJCLHdCQUEzQixDQUx0QjtBQU1JUSxxQkFBcUIsR0FBR1gsSUFBSSxDQUFDSSxJQUFMLENBQVVELGVBQVYsRUFBMkIsYUFBM0IsRUFBMEMsTUFBMUMsQ0FONUI7O0FBUUFTLE1BQU0sQ0FBQ0MsT0FBUCxHQUFpQjtBQUNiWCxFQUFBQSxXQURhO0FBRWJDLEVBQUFBLGVBRmE7O0FBSWJFLEVBQUFBLHVCQUphO0FBS2JDLEVBQUFBLEtBTGE7QUFNYkksRUFBQUEsZUFOYTtBQU9iQyxFQUFBQSxxQkFQYSxFQUFqQiIsInNvdXJjZXNDb250ZW50IjpbImNvbnN0IHBhdGggPSByZXF1aXJlKCdwYXRoJylcblxubGV0IHByb2plY3RQYXRoID0gJy9wcm9qZWN0JyxcbiAgICBhcHBsaWNhdGlvblBhdGggPSBwYXRoLmpvaW4ocHJvamVjdFBhdGgsICdhcHBsaWNhdGlvbicpLFxuICAgIHdlYmFwcEdpdGh1YlByb3h5TW9kdWxlID0gcmVxdWlyZSgnLi93ZWJhcHBSZXBvc2l0b3J5LmpzJyksXG4gICAgLy8gbGV0c2VuY3J5cHRQb3J0ID0gcHJvY2Vzcy5lbnYuTEVUU0VOQ1JZUFRfUE9SVCxcbiAgICBlbWFpbCA9IHByb2Nlc3MuZW52LkVNQUlMLFxuICAgIHByb3h5Rm9sZGVyUGF0aCA9IHBhdGguam9pbihhcHBsaWNhdGlvblBhdGgsICdkYXRhL3dlYmFwcFByb3h5Q29uZmlnJyksXG4gICAgY2VydGlmaWNhdGVCYXNlRm9sZGVyID0gcGF0aC5qb2luKGFwcGxpY2F0aW9uUGF0aCwgJ2NlcnRpZmljYXRlJywgJ2xpdmUnKVxuXG5tb2R1bGUuZXhwb3J0cyA9IHtcbiAgICBwcm9qZWN0UGF0aCwgXG4gICAgYXBwbGljYXRpb25QYXRoLFxuICAgIC8vIGxldHNlbmNyeXB0UG9ydCxcbiAgICB3ZWJhcHBHaXRodWJQcm94eU1vZHVsZSxcbiAgICBlbWFpbCxcbiAgICBwcm94eUZvbGRlclBhdGgsXG4gICAgY2VydGlmaWNhdGVCYXNlRm9sZGVyXG59Il19
