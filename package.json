@@ -1,24 +1,24 @@
 {
-  "name": "proxy",
-  "version": "1.0.1",
-  "main": "./entrypoint/programmaticAPI",
-  "description": "",
-  "scripts": {
-    "buildAndRelease": "yarn run scriptManager shouldCompileScript=true JSProject/buildAndRelease \".moduleProject({})\""
-  },
-  "dependencies": {
-    "child-process-promise": "^2.2.1",
-    "fs-promise": "^2.0.3",
-    "redbird": "^0.7.0"
-  },
-  "devDependencies": {
-    "@dependency/deploymentScript": "https://github.com/AppScriptIO/deploymentScript#semver:^1.x.x",
-    "@dependency/javascriptStaticAnalysis": "https://github.com/AppScriptIO/javascriptStaticAnalysis#semver:^1.x.x",
-    "@dependency/javascriptTranspilation": "https://github.com/AppScriptIO/javascriptTranspilation#semver:^1.x.x",
-    "@dependency/scriptManager": "https://github.com/AppScriptIO/scriptManager#semver:^1.x.x",
-    "typescript": "^3.3.3333"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+	"name": "proxy",
+	"version": "1.0.2",
+	"main": "./entrypoint/programmaticAPI",
+	"description": "",
+	"scripts": {
+		"buildAndRelease": "yarn run scriptManager shouldCompileScript=true JSProject/buildAndRelease \".moduleProject({})\""
+	},
+	"dependencies": {
+		"child-process-promise": "^2.2.1",
+		"fs-promise": "^2.0.3",
+		"redbird": "^0.7.0"
+	},
+	"devDependencies": {
+		"@dependency/deploymentScript": "https://github.com/AppScriptIO/deploymentScript#semver:^1.x.x",
+		"@dependency/javascriptStaticAnalysis": "https://github.com/AppScriptIO/javascriptStaticAnalysis#semver:^1.x.x",
+		"@dependency/javascriptTranspilation": "https://github.com/AppScriptIO/javascriptTranspilation#semver:^1.x.x",
+		"@dependency/scriptManager": "https://github.com/AppScriptIO/scriptManager#semver:^1.x.x",
+		"typescript": "^3.3.3333"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
 }
