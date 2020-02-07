@@ -1,0 +1,17 @@
+# TODO: FIX
+
+  # the service keeps restarting and checking or issuing certificates, as it is not built with automatic timed execution. It executes and then closes container.
+  letsencrypt:
+    image: certbot/dns-google:latest
+    ports:
+      - 80:80
+      - 443:443
+      - 3000:3000
+    volumes:
+      - "/mnt/datadisk-1/redbirdProxy/certificate:/etc/letsencrypt/"
+    deploy:
+      replicas: 1
+    environment:
+      EMAIL: ${EMAIL}
+    entrypoint: 'certbot certonly --agree-tos -n --test-cert --dns-google -m $EMAIL -d table.io -d cdn.taleb.io -d api.taleb.io -d socket.taleb.io'
+  
