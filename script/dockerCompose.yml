@@ -9,14 +9,14 @@ networks:
     external: true
     # driver: overlay
 
-volumes:
-  data:
-    driver: rexray
-    driver_opts:
-      size: "100"
-      volumetype: "pd-ssd"
-  data:
-    external: true
+# volumes:
+#   data:
+#     driver: rexray
+#     driver_opts:
+#       size: "100"
+#       volumetype: "pd-ssd"
+#   data:
+#     external: true
 
 services:
   proxy:
@@ -30,11 +30,6 @@ services:
     volumes:
       # - "/mnt/datadisk-1/redbirdProxy/server/webappProxyConfig:/app/server/webappProxyConfig"
       - "/mnt/datadisk-1/redbirdProxy/certificate:/project/application/certificate/"
-    deploy:
-      replicas: 1
-    update_config:
-      parallelism: 1
-      delay: 10s
     environment:
       DEPLOYMENT: production
       EMAIL: ${EMAIL}
@@ -51,9 +46,6 @@ services:
     environment:
       - DF_NOTIF_CREATE_SERVICE_URL=http://proxy:8080/v1/docker-flow-proxy/reconfigure
       - DF_NOTIF_REMOVE_SERVICE_URL=http://proxy:8080/v1/docker-flow-proxy/remove
-    deploy:
-      placement:
-        constraints: [node.role == manager]
 
   # the service keeps restarting and checking or issuing certificates, as it is not built with automatic timed execution. It executes and then closes container.
   letsencrypt:
@@ -64,8 +56,6 @@ services:
       - 3000:3000
     volumes:
       - "/mnt/datadisk-1/redbirdProxy/certificate:/etc/letsencrypt/"
-    deploy:
-      replicas: 1
     environment:
       EMAIL: ${EMAIL}
     entrypoint: 'certbot certonly --agree-tos -n --test-cert --dns-google -m $EMAIL -d table.io -d cdn.taleb.io -d api.taleb.io -d socket.taleb.io'
